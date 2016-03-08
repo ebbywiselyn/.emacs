@@ -1,0 +1,42 @@
+;; -*- emacs-lisp -*- <16/03/07 03:32:30 /home/ebby/.emacs.d/tramp>
+;; Tramp connection history.  Don't change this file.
+;; You can delete it, forcing Tramp to reapply the checks.
+
+((["scp" nil "ftp" nil nil]
+  nil)
+ (["scp" nil "davs" nil nil]
+  nil)
+ (["scp" nil "dav" nil nil]
+  nil)
+ (["scp" nil "synce" nil nil]
+  nil)
+ (["scp" nil "obex" nil nil]
+  nil)
+ (["scp" nil "su" nil nil]
+  nil)
+ (["scp" nil "sudo" nil nil]
+  nil)
+ (["scp" nil "ksu" nil nil]
+  nil)
+ (["scp" nil "rcp" nil nil]
+  nil)
+ (["scp" nil "remcp" nil nil]
+  nil)
+ (["scp" nil "scp" nil nil]
+  nil)
+ (["scp" nil "buildserver" nil nil]
+  ("uname" "Linux 3.8.0-44-generic")
+  ("test" "test")
+  ("remote-path"
+   ("/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin"))
+  ("remote-shell" "/bin/sh")
+  ("busybox" nil)
+  ("~" "/home/ebby"))
+ (["scp" nil "ec2.build.scypho" nil nil]
+  ("uname" "Linux 3.13.0-74-generic")
+  ("test" "test")
+  ("remote-path"
+   ("/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin"))
+  ("remote-shell" "/bin/sh")
+  ("busybox" nil)
+  ("~" "/home/ubuntu")))
