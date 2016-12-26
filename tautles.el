@@ -1,7 +1,20 @@
 ;;;###autoload
 (defun show-buffer-header ()
   (interactive)
+  ;; Rewrite this with pos-tip-show()
   (beginning-of-buffer-other-window (split-window-right)))
+
+;;;###autoload
+(defun show-buffer-head-postip (line-num)
+  (interactive "p")
+  (let ((start)
+        (end))
+    (save-excursion
+      (goto-char (point-min))
+      (setq start (line-beginning-position))
+      (line-move (or line-num 5))
+      (setq end (line-end-position)))
+    (pos-tip-show (buffer-substring start end))))
 
 ;;;###autoload
 (defun isearch-yank-symbol ()
@@ -14,5 +27,3 @@
 	  (ding)))
   (isearch-search-and-update)
   (isearch-edit-string))
-
-
