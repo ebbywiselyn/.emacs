@@ -1,6 +1,10 @@
 ;; Initialiae the load path
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
+;; lisp autocomplete
+;; disable this for company-mode instead
+(add-hook 'lisp-mode-hook 'company-mode)
+
 ;; emacs automatic themes
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -27,6 +31,7 @@
 
 ;; Tautles - My extensions
 (load-file "/home/ebby/.emacs.d/lisp/tautles.el")
+(global-set-key (kbd "C-*") 'isearch-yank-symbol)
 
 ;; elpy
 (package-initialize)
@@ -48,6 +53,9 @@
 ;; documentation popups that appear
 ;; on an completion candidate of jedi
 (company-quickhelp-mode 1)
+
+; To use company-mode in all buffers
+(add-hook 'after-init-hook 'global-company-mode)
 
 
 ;; FYI after elpy changes do elpy-rpc-restart
@@ -118,8 +126,8 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/evil")
 (require 'evil)
 
-(global-set-key (kbd "C-*") 'evil-search-word-forward)
-(global-set-key (kbd "C-#") 'evil-search-word-backward)
+;(global-set-key (kbd "C-*") 'evil-search-symbol-forward)
+(global-set-key (kbd "C-#") 'evil-search-symbol-backward)
 
 (global-set-key (kbd "C-z") 'find-grep)
 (global-set-key (kbd "M-C-z") 'find-grep-dired)
@@ -176,6 +184,7 @@
 
 ;; let helm take over
 (global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-mode 1)
 
 ;; etags of el.gz files
 (require 'jka-compr)
@@ -202,7 +211,3 @@
 (put 'erase-buffer 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'set-goal-column 'disabled nil)
-
-
-
-
