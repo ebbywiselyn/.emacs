@@ -8,7 +8,7 @@
 (defun show-buffer-head-postip (line-num)
   (interactive "p")
   (let ((start)
-        (end))
+	(end))
     (save-excursion
       (goto-char (point-min))
       (setq start (line-beginning-position))
@@ -50,4 +50,3 @@
 	      (message "starting myscypho")
 	      ))
 	   )))
-    
