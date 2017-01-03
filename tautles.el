@@ -50,3 +50,22 @@
 	      (message "starting myscypho")
 	      ))
 	   )))
+
+
+
+;;;###autoload
+(defadvice elpy-nav-forward-block
+    (before foo-bar ())
+  "This enables code navigation forward from any point"
+  (beginning-of-line))
+
+;;;###autoload
+(defadvice elpy-nav-backward-block
+    (before foo-bar ())
+  "This enables code navigation backward from any point"
+  (beginning-of-line))
+
+;;;###autoload
+(ad-activate 'elpy-nav-forward-block)
+;;;###autoload
+(ad-activate 'elpy-nav-backward-block)
