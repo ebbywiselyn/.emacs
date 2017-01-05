@@ -1,4 +1,15 @@
 ;;;###autoload
+(defun ffap-delete ()
+  "Delete file at point"
+  (interactive)
+  (progn
+    (ffap-copy-string-as-kill)
+    (let ((f (current-kill 0)))
+      (if (yes-or-no-p (format "Really delete? %s" f))
+	  (delete-file (current-kill 0))
+	(message "just copied to kill ring")))))
+
+;;;###autoload
 (defun show-buffer-header ()
   (interactive)
   ;; Rewrite this with pos-tip-show()
