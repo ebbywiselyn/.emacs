@@ -1,0 +1,10 @@
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(defalias 'sh 'shell)
+(defalias 'hgg 'helm-grep-do-git-grep)
+(defalias 'er 'eval-region)
+(defalias 'lf 'load-file)
+(defalias 'wm 'whitespace-mode)
+(defalias 'rb 'rename-buffer)
+(defalias 'hb 'helm-bookmarks)
+(defalias 'wc 'whitespace-cleanup)
