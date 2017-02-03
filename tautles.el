@@ -78,37 +78,59 @@
 	      (message "starting interview")
 	      ))
 	   )
-    (start-shell)))
-
+    (start-shell 1)))
 
 
 (defun start-all-processes ()
   (progn
-    (start-shell)
-    (run-zookeeper)
-    (run-at-time "5 sec" 'nil 'run-kafkabroker) ; we dont want to fail because of zk locks
-    (run-kafkaconsumer)))
+    (start-shell 'nil)
+    (run-zookeeper 'nil)
+    (run-at-time "10 sec" 'nil 'run-kafkabroker 'nil) ; we dont want to fail because of zk locks
+    (run-kafkaconsumer 'nil)))
 
 (defun lazy-load-after-init ()
   (run-at-time "10 sec" 'nil 'start-all-processes))
 
 (add-hook 'after-init-hook 'lazy-load-after-init)
-;; fix me this messes up the autocomplete(default is always home till a cd)
+(defun str-cmd (path venv-path)
+  (format "cd %s; source %s" path venv-path))
+
 (defun shell-cd-desktop ()
-  (if (boundp 'current-desktop-name)
-      (cond ((eq current-desktop-name 'nodeadmin)
-	     (progn
-	       (comint-simple-send (get-buffer-process "*shell*") "cd ~/code/node-admin/")
-	       (setq default-directory "~/code/node-admin/")))
-	    ((eq current-desktop-name 'myscypho)
-	     (comint-simple-send (get-buffer-process "*shell*") "cd ~/code/myscypho/"))
-	    ((eq current-desktop-name 'monitoring)
-	     (comint-simple-send (get-buffer-process "*shell*") "cd ~/code/web-monitoring/"))
-	    ((eq current-desktop-name 'nodeserver)
-	     (comint-simple-send (get-buffer-process "*shell*") "cd ~/code/node-server/"))
-	    )
-    '()
-    ))
+  (let* ((node-admin-path "~/code/node-admin/")
+	 (node-admin-venv-path "~/code/node-admin/django/env/bin/activate")
+	 (myscypho-path "~/code/myscypho/")
+	 (myscypho-venv-path "~/code/myscypho/myscypho/env/bin/activate")
+	 (monitoring-path "~/code/web-monitoring/")
+	 (monitoring-venv-path "~/code/web-monitoring/env/bin/activate"))
+    (and (boundp 'current-desktop-name)
+	 (cond ((eq current-desktop-name 'nodeadmin)
+		(progn
+		  (comint-simple-send
+		   (get-buffer-process "*shell*") (str-cmd node-admin-path node-admin-venv-path))
+		  (message "setting node-admin")
+		  (setq default-directory node-admin-path )))
+	       ((eq current-desktop-name 'myscypho)
+		(progn
+		  (comint-simple-send
+		   (get-buffer-process "*shell*") (str-cmd myscypho-path myscypho-venv-path))
+		  (setq default-directory "~/code/myscypho/")))
+	       ((eq current-desktop-name 'monitoring)
+		(progn
+		  (comint-simple-send
+		   (get-buffer-process "*shell*") (str-cmd monitoring-path monitoring-venv-path))
+		  (setq default-directory "~/code/web-monitoring/")))
+	       ((eq current-desktop-name 'nodeserver)
+		(progn
+		  (comint-simple-send
+		   (get-buffer-process "*shell*") "cd ~/code/node-server/")
+		  (setq default-directory "~/code/node-server/")))))))
+
+
+(defun test-shell-cd-desktop ()
+  ; switches *shell* to nodeadmin and activates virtualenv
+  (let ((current-desktop-name 'myscypho))
+    (progn
+      (shell-cd-desktop))))
 
 ;;;###autoload
 (defadvice shell
@@ -146,18 +168,18 @@
   "command line arguments to `zookeeper-server-start.sh'")
 
 ;;;###autoload
-(defun run-zookeeper ()
+(defun run-zookeeper (switch)
   "Run Zookeeper"
-  (interactive)
+  (interactive "i")
   (let* ((zookeeper-buffer-name "*zookeeper*")
 	 (zookeeper-buffer (get-buffer-create zookeeper-buffer-name)))
     (if (comint-check-proc zookeeper-buffer)
-	(switch-to-buffer zookeeper-buffer-name)
+	(and switch (switch-to-buffer zookeeper-buffer-name))
       (progn
 	(apply 'make-comint-in-buffer "*zookeeper*"
 	       zookeeper-buffer zookeeper-cli-file-path
 	       'nil (list zookeeper-cli-arguments))
-	(switch-to-buffer zookeeper-buffer))
+	(and switch (switch-to-buffer zookeeper-buffer)))
       )))
 
 ;;;###autoload
@@ -169,18 +191,18 @@
   "command line arguments to `kafka-server-start.sh'")
 
 ;;;###autoload
-(defun run-kafkabroker()
+(defun run-kafkabroker(switch)
   "Run Kafka Broker"
-  (interactive)
+  (interactive "i")
   (let* ((kafka-broker-buffer-name "*kafka*")
 	 (kafka-broker-buffer (get-buffer-create kafka-broker-buffer-name)))
     (if (comint-check-proc kafka-broker-buffer)
-	(switch-to-buffer kafka-broker-buffer)
+	(and switch (switch-to-buffer kafka-broker-buffer))
       (progn
 	(apply
 	 'make-comint-in-buffer "*kafka*" kafka-broker-buffer
 	 kafka-broker-cli-file-path 'nil (list kafka-broker-cli-arguments))
-	(switch-to-buffer kafka-broker-buffer)))))
+	(and switch (switch-to-buffer kafka-broker-buffer))))))
 
 ;;;###autoload
 (defvar kafka-consumer-cli-file-path "/home/ebby/apps/kafka/kafka-0.10/bin/kafka-console-consumer.sh"
@@ -191,21 +213,21 @@
   "command line arguments to `kafka-console-consumer.sh'")
 
 ;;;###autoload
-(defun run-kafkaconsumer()
+(defun run-kafkaconsumer(switch)
   "Run Kafka Consumer"
-  (interactive)
+  (interactive "i")
   (let* ((kafka-consumer-buffer-name "*consumer*")
 	 (kafka-consumer-buffer (get-buffer-create kafka-consumer-buffer-name)))
     (if (comint-check-proc kafka-consumer-buffer)
-	(switch-to-buffer kafka-consumer-buffer)
+	(and switch (switch-to-buffer kafka-consumer-buffer))
       (progn
 	(apply
 	 'make-comint-in-buffer "*consumer*" kafka-consumer-buffer
 	 kafka-consumer-cli-file-path 'nil kafka-consumer-cli-arguments)
-	(switch-to-buffer kafka-consumer-buffer)
+	(and switch (switch-to-buffer kafka-consumer-buffer))
 	))))
 
-;;;###autoload
+
 (defvar kafka-mode-map
   (let ((map (nconc (make-sparse-keymap) comint-mode-map)))
     ;; example definition
@@ -213,6 +235,6 @@
     map)
   "Basic mode map for `run-cassandra'")
 
-;;;###autoload
+
 (defvar kafka-prompt-regexp "^\\(?:\\[[^@]+@[^@]+\\]\\)"
   "Prompt for `run-kafka'.")
