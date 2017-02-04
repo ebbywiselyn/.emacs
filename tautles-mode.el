@@ -1,5 +1,6 @@
-;; a simple major mode for tautles code
-
+;;; tautles-mode --- Summary
+;;; Commentary:
+;;; Code:
 (setq tautles-highlights '(("Sin\\|Cos\\|Sum\\|Tan" . font-lock-function-name-face)
 			   ("Pi\\|Infinity" . font-lock-constant-face)))
 
@@ -12,6 +13,3 @@
 ;;Sum(z) = Pi * Infinity
 
 (tautles-mode)
-
-
-			   
