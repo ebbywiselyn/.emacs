@@ -252,4 +252,6 @@
 (defvar kafka-prompt-regexp "^\\(?:\\[[^@]+@[^@]+\\]\\)"
   "Prompt for `run-kafka'.")
 
+(provide 'tautles)
+
 ;;; tautles.el ends here
