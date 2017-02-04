@@ -31,3 +31,5 @@
       > "\"Generated Doc: " (upcase comments) -1 "\"" \n
       >  "(" _ ")" \n > ")"))
   (elisp-skeleton-defun1))
+
+;;; tautles-skeletons.el ends here
