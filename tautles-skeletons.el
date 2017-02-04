@@ -12,17 +12,26 @@
   ";;; " (buffer-name (current-buffer)) " ends here")
 
 
-(define-skeleton elisp-skeleton-defun
-  "Generate defun skeleon"
-  "Name of function: "
-  > "(defun (" str " ("
-  (
-   "Param: " str " "
-   )
-  -1
-  ")" \n
-  "\"Generated Doc: \"" comment
-  \n "(" _ ")" \n > ")")
+;; needs more work, global skeleton defined
+(defun elisp-skeleton-defun ()
+  (interactive)
+  (progn
+    (setq comments "")
+    (defun my-append (element)
+       (progn
+	 (setq comments (concat comments element " "))
+	 element))
+    (define-skeleton elisp-skeleton-defun1
+      "Generate defun skeleon"
+      "Name of function: "
+      > "(defun " str " ("
+      ((my-append (skeleton-read "Params:")) str " ")
+      -1
+      ")" \n
+      > "\"Generated Doc: " (upcase comments) -1 "\"" \n
+      >  "(" _ ")" \n > ")"))
+  (elisp-skeleton-defun1))
+
 
 ;;; tautles-skeletons ends here
 
