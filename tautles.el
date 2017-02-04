@@ -1,6 +1,10 @@
+;;; package -- Summary
+;;; Commentary:
+
+;;; Code:
 ;;;###autoload
 (defun ffap-delete ()
-  "Delete file at point"
+  "Delete file at point."
   (interactive)
   (progn
     (ffap-copy-string-as-kill)
@@ -11,15 +15,17 @@
 
 ;;;###autoload
 (defun show-buffer-header ()
+  "Show the contents of the buffers header."
   (interactive)
   ;; Rewrite this with pos-tip-show()
   (beginning-of-buffer-other-window (split-window-right)))
 
 ;;;###autoload
 (defun show-buffer-head-postip (line-num)
+  "Show the buffer head postip at (LINE-NUM) ."
   (interactive "p")
   (let ((start)
-	(end))
+        (end))
     (save-excursion
       (goto-char (point-min))
       (setq start (line-beginning-position))
@@ -29,6 +35,7 @@
 
 ;;;###autoload
 (defun isearch-yank-symbol ()
+  "Copy symbol at point."
   (interactive)
   (let ((sym (symbol-at-point)))
     (if sym
@@ -39,14 +46,16 @@
   (isearch-search-and-update)
   (isearch-edit-string))
 
+(defvar current-desktop-name)
 ;;;###autoload
 (defun get-desktop-name ()
+  "Return the name of the current desktop."
   (interactive)
   (message (format "Desktop: %s" current-desktop-name)))
 
 ;;;###autoload
 (defun desktop-dir (dir-name)
-  ;; TODO see if you can use def-advice (advising functions instead)
+  "TODO see if you can use def-advice (advising functions instead) load the current desktop (DIR-NAME)."
   (interactive
    (list
     (read-directory-name "Change To Directory: " "/home/ebby/.emacs.d/desktop/")))
@@ -82,6 +91,7 @@
 
 
 (defun start-all-processes ()
+  "Start all the initial processes."
   (progn
     (start-shell 'nil)
     (run-zookeeper 'nil)
@@ -89,13 +99,16 @@
     (run-kafkaconsumer 'nil)))
 
 (defun lazy-load-after-init ()
+  "Run after a delay."
   (run-at-time "10 sec" 'nil 'start-all-processes))
-
+  
 (add-hook 'after-init-hook 'lazy-load-after-init)
 (defun str-cmd (path venv-path)
+  "Get command as string, PATH is the command path and VENV-PATH is the virtual env path."
   (format "cd %s; source %s" path venv-path))
-
+  
 (defun shell-cd-desktop ()
+  "Change directory to current desktop."
   (let* ((node-admin-path "~/code/node-admin/")
 	 (node-admin-venv-path "~/code/node-admin/django/env/bin/activate")
 	 (myscypho-path "~/code/myscypho/")
@@ -124,10 +137,10 @@
 		  (comint-simple-send
 		   (get-buffer-process "*shell*") "cd ~/code/node-server/")
 		  (setq default-directory "~/code/node-server/")))))))
-
+    
 
 (defun test-shell-cd-desktop ()
-  ; switches *shell* to nodeadmin and activates virtualenv
+  "Test function for cd-desktop, ; switch *shell* to nodeadmin and activates virtualenv."
   (let ((current-desktop-name 'myscypho))
     (progn
       (shell-cd-desktop))))
@@ -135,20 +148,20 @@
 ;;;###autoload
 (defadvice shell
     (after shell-after ())
-  "This switches to the current directory of the desktop"
+  "Switch to the current directory of the desktop."
   (shell-cd-desktop))
 
 
 ;;;###autoload
 (defadvice elpy-nav-forward-block
     (before foo-bar ())
-  "This enables code navigation forward from any point"
+  "Enable code navigation forward from any point."
   (beginning-of-line))
 
 ;;;###autoload
 (defadvice elpy-nav-backward-block
     (before foo-bar ())
-  "This enables code navigation backward from any point"
+  "Enable code navigation backward from any point."  
   (beginning-of-line))
 
 ;;;###autoload
@@ -161,21 +174,21 @@
 
 ;;;###autoload
 (defvar zookeeper-cli-file-path "/home/ebby/apps/kafka/kafka-0.10/bin/zookeeper-server-start.sh"
-  "Path to the program used by `run-zookeeper'")
+  "Path to the program used by `run-zookeeper'.")
 
 ;;;###autoload
 (defvar zookeeper-cli-arguments "/home/ebby/apps/kafka/kafka-0.10/config/zookeeper.properties"
-  "command line arguments to `zookeeper-server-start.sh'")
+  "Command line arguments to `zookeeper-server-start.sh'.")
 
 ;;;###autoload
 (defun run-zookeeper (switch)
-  "Run Zookeeper"
+  "Run Zookeeper switch to buffer if SWITCH is non 'nil."
   (interactive "i")
   (let* ((zookeeper-buffer-name "*zookeeper*")
 	 (zookeeper-buffer (get-buffer-create zookeeper-buffer-name)))
     (if (comint-check-proc zookeeper-buffer)
 	(and switch (switch-to-buffer zookeeper-buffer-name))
-      (progn
+      (progn 
 	(apply 'make-comint-in-buffer "*zookeeper*"
 	       zookeeper-buffer zookeeper-cli-file-path
 	       'nil (list zookeeper-cli-arguments))
@@ -184,11 +197,11 @@
 
 ;;;###autoload
 (defvar kafka-broker-cli-file-path "/home/ebby/apps/kafka/kafka-0.10/bin/kafka-server-start.sh"
-  "path to the program used by `run-kafka'")
+  "Path to the program used by `run-kafka'.")
 
 ;;;###autoload
 (defvar kafka-broker-cli-arguments "/home/ebby/apps/kafka/kafka-0.10/config/server.properties"
-  "command line arguments to `kafka-server-start.sh'")
+  "Command line arguments to `kafka-server-start.sh'.")
 
 ;;;###autoload
 (defun run-kafkabroker(switch)
@@ -198,19 +211,19 @@
 	 (kafka-broker-buffer (get-buffer-create kafka-broker-buffer-name)))
     (if (comint-check-proc kafka-broker-buffer)
 	(and switch (switch-to-buffer kafka-broker-buffer))
-      (progn
-	(apply
+      (progn 
+	(apply 
 	 'make-comint-in-buffer "*kafka*" kafka-broker-buffer
-	 kafka-broker-cli-file-path 'nil (list kafka-broker-cli-arguments))
+ 	 kafka-broker-cli-file-path 'nil (list kafka-broker-cli-arguments))
 	(and switch (switch-to-buffer kafka-broker-buffer))))))
 
 ;;;###autoload
 (defvar kafka-consumer-cli-file-path "/home/ebby/apps/kafka/kafka-0.10/bin/kafka-console-consumer.sh"
-  "path to the program used by `run-kafka'")
+  "Path to the program used by `run-kafka'.")
 
 ;;;###autoload
 (defvar kafka-consumer-cli-arguments '("--whitelist" "event.json.*" "--bootstrap-server" "localhost:9092")
-  "command line arguments to `kafka-console-consumer.sh'")
+  "Command line arguments to `kafka-console-consumer.sh'.")
 
 ;;;###autoload
 (defun run-kafkaconsumer(switch)
@@ -220,21 +233,23 @@
 	 (kafka-consumer-buffer (get-buffer-create kafka-consumer-buffer-name)))
     (if (comint-check-proc kafka-consumer-buffer)
 	(and switch (switch-to-buffer kafka-consumer-buffer))
-      (progn
-	(apply
+      (progn 
+	(apply 
 	 'make-comint-in-buffer "*consumer*" kafka-consumer-buffer
-	 kafka-consumer-cli-file-path 'nil kafka-consumer-cli-arguments)
+ 	 kafka-consumer-cli-file-path 'nil kafka-consumer-cli-arguments)
 	(and switch (switch-to-buffer kafka-consumer-buffer))
 	))))
 
-
+(defvar comint-mode-map)
 (defvar kafka-mode-map
   (let ((map (nconc (make-sparse-keymap) comint-mode-map)))
     ;; example definition
     (define-key map "\t" 'completion-at-point)
     map)
-  "Basic mode map for `run-cassandra'")
+  "Basic mode map for `run-cassandra'.")
 
 
 (defvar kafka-prompt-regexp "^\\(?:\\[[^@]+@[^@]+\\]\\)"
   "Prompt for `run-kafka'.")
+
+;;; tautles.el ends here

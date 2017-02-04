@@ -8,3 +8,5 @@
 (defalias 'rb 'rename-buffer)
 (defalias 'hb 'helm-bookmarks)
 (defalias 'wc 'whitespace-cleanup)
+(defalias 'plp 'package-list-packages)
+(defalias 'fl 'find-library)
