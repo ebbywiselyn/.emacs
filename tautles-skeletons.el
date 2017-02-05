@@ -32,4 +32,5 @@
       >  "(" _ ")" \n > ")"))
   (elisp-skeleton-defun1))
 
+(provide 'tautles-skeletons)
 ;;; tautles-skeletons.el ends here

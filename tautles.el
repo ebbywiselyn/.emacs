@@ -252,6 +252,13 @@
 (defvar kafka-prompt-regexp "^\\(?:\\[[^@]+@[^@]+\\]\\)"
   "Prompt for `run-kafka'.")
 
+
+(defadvice save-buffers-kill-emacs
+    (before save-logs (arg) activate)
+  (save-some-buffers t (lambda () (when (eq major-mode 'erc-mode) t))))
+
 (provide 'tautles)
 
 ;;; tautles.el ends here
+
+
