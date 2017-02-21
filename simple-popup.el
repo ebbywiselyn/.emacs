@@ -29,3 +29,5 @@
 
 (magit-fruits-popup)
 
+;;; simple-popup.el ends here
+

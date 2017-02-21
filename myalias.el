@@ -15,5 +15,6 @@
 (defalias 'fl 'find-library)
 (defalias 'pi 'package-install)
 (defalias 'df 'describe-function)
+(defalias 'kt 'magit-kafka-topics)
 
 ;;; myalias.el ends here

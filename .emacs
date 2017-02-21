@@ -234,10 +234,6 @@
 
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
-;; Always, always have a shell
-(defun start-shell ()
-  "Start shell process"
-    (shell))
 
 (require 'filenotify)
 (defun alert-git-locks ()
