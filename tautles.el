@@ -267,7 +267,7 @@
 	    (apply
 	     'make-comint-in-buffer monitoring-server-buffer-name monitoring-server-buffer
 	     monitoring-server-cli-file-path 'nil monitoring-server-cli-args)
-	  (message "run-monitoring-server only works with monitoring desktop"))))))
+	  (message "run-monitoring-server only works with monitoring desktop, running %s" current-desktop-name))))))
 
 
 ;;;###autoload
