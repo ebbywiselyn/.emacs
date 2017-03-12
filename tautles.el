@@ -302,6 +302,15 @@
     (before save-logs (arg) activate)
   (save-some-buffers t (lambda () (when (eq major-mode 'erc-mode) t))))
 
+
+(defun print-all-symbols ()
+  "."
+  (interactive)
+  (defun print-syms (sym)
+    (message "symbol: %s" sym))
+  (mapatoms 'print-syms))
+
+
 (provide 'tautles)
 
 ;;; tautles.el ends here
