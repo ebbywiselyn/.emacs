@@ -103,6 +103,7 @@
 	      ))
 	   ((string-match "nodeserver" dir-name)
 	    (progn
+	      (pyvenv-activate "/home/ebby/code/node-server/django/env/")
 	      (setq current-desktop-name 'nodeserver)
 	      (message "starting nodeserver")
 	      )))
@@ -155,6 +156,7 @@
 		(progn
 		  (comint-simple-send
 		   (get-buffer-process "*shell*") "cd ~/code/node-server/")
+		  ;;; todo check if virtualenv is active then change to django directory
 		  (setq default-directory "~/code/node-server/")))))))
 
 
